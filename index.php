@@ -2,9 +2,9 @@
 # Get all events
 function getEvents()
 {
-    echo "Du 02/12/2020 12H00 au 02/12/2020 14H00 : Anniversaire Charlotte <br>Du 20/12/2020 00H00 au 30/12/2020 23H59 : Vacances";
+    echo "01/12/2020 de 10H00 à 12H00 : Droit <br>01/12/2020 de 13H30 à 15H30 : Com";
     /*$curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, "http://lt-6th75s2:8080/Agenda_war1758325854154887186/event");
+    curl_setopt($curl, CURLOPT_URL, "http://localhost:8080/Agenda/api/event");
     $response = curl_exec($curl);
     $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
     $header_string = substr($response, 0, $header_size);
@@ -22,7 +22,10 @@ function getEvents()
         <link href="styles.css" rel="stylesheet" media="all" type="text/css">
     </head>
     <body>
-        <h1>Accueil</h1>
+        <a href="index.php" style="text-decoration:none"><h1>Accueil</h1></a>
+
+        <?php if(isset($_GET['new_event']))echo "Nouvel événement créé avec succès<br><br>"?>
+
         Evénements : <br>
         <?php getEvents();?>
         <br>

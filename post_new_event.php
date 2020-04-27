@@ -5,11 +5,17 @@ function postEvent()
     $text = htmlspecialchars($_POST['text']);
     echo $text;
     /*$curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, "http://lt-6th75s2:8080/Agenda_war1758325854154887186/event");
+    curl_setopt($curl, CURLOPT_URL, "http://localhost:8080/Agenda/api/event");
     curl_setopt($curl, CURLOPT_POST, 1);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $text);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($_POST));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/x-www-form-urlencoded'
+    ));
+    # curl_setopt($curl, CURLOPT_HEADER, 1);
+
     $response = curl_exec($curl);
     curl_close($curl);*/
+    header("Location: http://localhost/agenda?new_event=true"); # retour accueil auto
 }
 ?>
 <!DOCTYPE html>
