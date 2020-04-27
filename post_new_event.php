@@ -14,6 +14,9 @@ function postEvent()
     # curl_setopt($curl, CURLOPT_HEADER, 1);
 
     $response = curl_exec($curl);
+    $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+    $body = substr($response, $header_size);
+    echo "<br>".$body;
     curl_close($curl);*/
     header("Location: http://localhost/agenda?new_event=true"); # retour accueil auto
 }
