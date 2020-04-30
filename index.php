@@ -10,7 +10,7 @@ function getEvents()
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         $response = curl_exec($curl);
-        echo $response;
+    echo $response;
         curl_close($curl);
     }
 }
