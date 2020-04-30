@@ -1,48 +1,18 @@
 <?php
-/*
- * Requêtes
-@GET
-public Response getUser(@FormParam("firstName") String firstName, @FormParam("lastName") String lastName);
-
-@POST
-public Response postUser(@FormParam("firstName") String firstName, @FormParam("lastName") String lastName);
-
-@POST
-@Path("{userId}")
-public Response postAgenda(@PathParam("userId") int userId);
-
-@DELETE
-@Path("{userId}")
-public Response deleteAgenda(@PathParam("userId") int userId);
-
-@GET
-@Path("{userId}/event")
-public Response getEvents(@PathParam("userId") int userId);
-
-@POST
-@Path("{userId}/event")
-public Response postEvent(@PathParam("userId") int userId, @FormParam("startDate") String startDate,
-	@FormParam("finishDate") String finishDate, @FormParam("name") String name);
-
-@GET
-@Path("{userId}/event/day")
-public Response getEventByDay(@PathParam("userId") int userId, @QueryParam("date") String date);
-
-@DELETE
-@Path("{userId}/event/{eventId}")
-public Response deleteEvent(@PathParam("userId") int userId, @PathParam("eventId") int eventId);
- */
+session_start();
 function getEvents()
 {
-    echo "01/12/2020 de 10H00 à 12H00 : Droit <br>01/12/2020 de 13H30 à 15H30 : Com";
-    /*$curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, "http://localhost:8080/Agenda/api/event");
-    $response = curl_exec($curl);
-    $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-    $header_string = substr($response, 0, $header_size);
-    $body = substr($response, $header_size);
-    echo $body;
-    curl_close($curl);*/
+    if(isset($_SESSION['userId'])) {
+        date_default_timezone_set("Europe/Paris");
+        $query = http_build_query(["date" => date('d-m-Y H\Hi')]);
+        $url = "http://localhost:8080/Agenda/api/user/".$_SESSION['userId']."/event/day?".$query;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        $response = curl_exec($curl);
+        echo $response;
+        curl_close($curl);
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -51,16 +21,52 @@ function getEvents()
         <title>
             Accueil
         </title>
-        <link href="styles.css" rel="stylesheet" media="all" type="text/css">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="agenda.css" rel="stylesheet" media="all" type="text/css">
     </head>
+
     <body>
-        <a href="index.php" style="text-decoration:none"><h1>Accueil</h1></a>
+        <div id="accueil">
+            <div id="agenda">
+                <a href="index.php" style="text-decoration:none">
+                    <h1>Accueil</h1></a>
+                    <p> Nous sommes le <strong>
+                            <?php date_default_timezone_set("Europe/Paris");
+                            echo date('d-m-Y H\Hi'); ?>
+                        </strong></p>
 
-        <?php if(isset($_GET['new_event']))echo "Nouvel événement créé avec succès<br><br>"?>
+                <?php if(isset($_GET['new_event']))echo "Nouvel événement créé avec succès<br><br>"?>
+                <?php if(isset($_GET['new_user']))echo "Nouvel utilisateur ajouté !<br><br>"?>
 
-        Evénements : <br>
-        <?php getEvents();?>
-        <br>
-        <a href="new_event.php">Créer un nouvel événement</a>
+               <h2> Emploi du temps du jour </h2>
+               <br>
+                 <div id="events">
+
+                 <?php getEvents();?>
+                </div>
+                <br>
+                <button class=" button" id="buttonevent" onclick="window.location.href = 'new_event.php';"> Nouvel événement</button> <br/>
+                <button class=" button" onclick="window.location.href = 'agenda.php';"> Agenda complet </button>
+             </div>
+            <div id="utilisateur">
+
+                <form action="get_user_id.php" method="post">
+                    <fieldset>
+                        <legend>Connectez-vous</legend>
+                        <label for="prenom">Prenom </label>
+                        <input id="prenom" type="text" name="firstName"><br>
+
+                        <label for="nom">Nom </label>
+                        <input id="nom" type="text" name="lastName"><br>
+                    </fieldset>
+                    <p><input class="button" type="submit" value="Connexion"></p>
+                    
+                 </form>
+                <button class=" button" onclick="window.location.href = 'new_user.php';"> Nouvel utilisateur </button>
+            </div>
+        </div>
     </body>
 </html>
